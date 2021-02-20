@@ -15,7 +15,7 @@ class CreateCashRegisterTable extends Migration
     {
         Schema::create('cash_register', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('denomination');
+            $table->string('denomination', 10);
             $table->unsignedInteger('quantity');
             $table->timestamps();
         });

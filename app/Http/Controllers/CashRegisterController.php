@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CashRegister;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCashRegisterRequest;
 
 class CashRegisterController extends Controller
 {
@@ -20,19 +21,23 @@ class CashRegisterController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreCashRegisterRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCashRegisterRequest $request)
     {
-        foreach ($request->all() as $denomination => $quantity) {
-            CashRegister::create([
+        $data = [];
+        foreach ($request->validated() as $denomination => $quantity) {
+            $data[] = CashRegister::create([
                 'denomination' => $denomination,
                 'quantity' => $quantity,
             ]);
         }
 
-        return response()->json(['message' => 'El dinero base se registro correctamente.'], 200);
+        return response()->json([
+            'message' => 'El dinero base se registro correctamente.',
+            'data' => $data
+        ], 200);
     }
 
     /**

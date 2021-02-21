@@ -42,17 +42,6 @@ class CashRegisterController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -67,11 +56,23 @@ class CashRegisterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $cashRegister = CashRegister::getAllDenominations();
+        $totalWithdraw = CashRegister::getTotalDeposited($cashRegister);
+
+        foreach($cashRegister as $denomination => $quantity) {
+            $cashRegister[$denomination] = 0;
+        }
+
+        CashRegister::updateAllDenominations($cashRegister);
+
+        return response()->json([
+            'message' => 'La caja registrado se vacio correctamente.',
+            'totalWithdraw' => $totalWithdraw,
+            'cashRegister' => CashRegister::getAllDenominations()
+        ], 200);
     }
 }

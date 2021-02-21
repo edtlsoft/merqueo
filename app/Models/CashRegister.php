@@ -40,9 +40,15 @@ class CashRegister extends Model
     {
         $totalDeposited = 0;
 
+        $denominationsDB = self::getAllDenominations();
+
         foreach($denominations as $denomination => $quantity) {
             $totalDeposited += self::getTheValueOfTheDenomination($denomination) * $quantity;
+
+            $denominationsDB[$denomination] += $quantity;
         }
+
+        self::updateAllDenominations($denominationsDB);
 
         return $totalDeposited;
     }
@@ -73,6 +79,8 @@ class CashRegister extends Model
                 ? ($denominationsToReturned[$denomination] + 1) 
                 : 1;
         }
+
+        self::updateAllDenominations($denominationsDB);
 
         return $denominationsToReturned;
     }

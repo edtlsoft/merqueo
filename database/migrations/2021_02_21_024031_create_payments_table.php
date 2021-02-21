@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCashRegisterTable extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateCashRegisterTable extends Migration
      */
     public function up()
     {
-        Schema::create('cash_register', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('denomination', 10)->unique();
-            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('amount');
+            $table->text('denominations');
+            $table->unsignedInteger('total_deposited');
+            $table->text('denominations_to_returned');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateCashRegisterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cash_register');
+        Schema::dropIfExists('payments');
     }
 }

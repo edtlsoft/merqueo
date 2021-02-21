@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CashRegisterController;
 
 /*
@@ -20,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/cash-register', [CashRegisterController::class, 'store'])->name('cash-register.store');
+
+Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');

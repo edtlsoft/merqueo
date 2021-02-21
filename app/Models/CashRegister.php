@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use function PHPUnit\Framework\isNull;
+
 class CashRegister extends Model
 {
     use HasFactory;
@@ -69,6 +71,10 @@ class CashRegister extends Model
         while($change > 0) {
             $maxDenomination = self::getMaxPosibleDenominationChange($change, $denominationsDB);
 
+            if( \is_null($maxDenomination) ) {
+                return null;
+            }
+
             $denomination = "D{$maxDenomination}";
 
             $denominationsDB[$denomination] -= 1;
@@ -85,7 +91,26 @@ class CashRegister extends Model
         return $denominationsToReturned;
     }
 
-    public static function getMaxPosibleDenominationChange($change, $denominations) 
+    public static function getMaxPosibleDenominationChange($change, $denominations, $execptions=[]) 
+    {
+        $maxDenomination = self::getMaxDenominationChange($change, $denominations, $execptions);
+
+        if( ! $maxDenomination ) {
+            return null;
+        }
+
+        $denomination = "D{$maxDenomination}";
+
+        if( $denominations[$denomination] > 0 ) {
+            return $maxDenomination;
+        }
+
+        $execptions[] = $maxDenomination;
+
+        return self::getMaxPosibleDenominationChange($change, $denominations, $execptions);
+    }
+
+    public static function getMaxDenominationChange($change, $denominations, $execptions) 
     {
         $denominations = \array_keys($denominations);
 
@@ -93,8 +118,8 @@ class CashRegister extends Model
 
         \sort($denominations);
 
-        $denominations = \array_filter($denominations, function($denomination) use ($change){
-            return ($denomination <= $change);
+        $denominations = \array_filter($denominations, function($denomination) use ($change, $execptions){
+            return ($denomination <= $change) && ! \in_array($denomination, $execptions);
         });
 
         return \array_pop($denominations);

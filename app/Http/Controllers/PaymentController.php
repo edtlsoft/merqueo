@@ -24,6 +24,12 @@ class PaymentController extends Controller
 
         $denominationsToReturn = CashRegister::getDenominationsToReturned($amountPaid, $totalDeposited);
 
+        if( \is_null($denominationsToReturn) ) {
+            return response()->json([
+                'message' => 'Lo sentimos, en estos momentos no tenemos suficiente efectivo para realizar esta operacion.'
+            ], 500);
+        }
+
         Payment::create([
             'amount' => $amountPaid,
             'denominations' => json_encode($denominations),
@@ -34,7 +40,8 @@ class PaymentController extends Controller
         return response()->json([
             'message' => 'El pago se registro correctamente.',
             'data' => [
-                'denominations_to_returned' => $denominationsToReturn
+                'denominationsToReturned' => $denominationsToReturn,
+                'cashRegister' => CashRegister::getAllDenominations()
             ]
         ], 200);
     }

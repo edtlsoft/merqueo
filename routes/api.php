@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/cash-register', [CashRegisterController::class, 'index'])->name('cash-register.index');
 Route::post('/cash-register', [CashRegisterController::class, 'store'])->name('cash-register.store');
 
 Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');

@@ -15,7 +15,14 @@ class CashRegisterController extends Controller
      */
     public function index()
     {
-        //
+        $cashRegister = CashRegister::getAllDenominations();
+
+        $totalMoney = CashRegister::getTotalDeposited($cashRegister);
+
+        return response()->json([
+            'cashRegister' => $cashRegister,
+            'totalMoney' => $totalMoney
+        ]);
     }
 
     /**

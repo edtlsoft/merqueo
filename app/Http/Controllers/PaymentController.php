@@ -9,9 +9,21 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $payments = Payment::all();
+
+        return response()->json(compact('payments'), 200);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCashRegisterRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)

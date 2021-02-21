@@ -26,13 +26,7 @@ class CashRegisterController extends Controller
      */
     public function store(StoreCashRegisterRequest $request)
     {
-        $data = [];
-        foreach ($request->validated() as $denomination => $quantity) {
-            $data[] = CashRegister::create([
-                'denomination' => $denomination,
-                'quantity' => $quantity,
-            ]);
-        }
+        $data = CashRegister::updateAllDenominations($request->validated());
 
         return response()->json([
             'message' => 'El dinero base se registro correctamente.',

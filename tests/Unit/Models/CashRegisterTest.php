@@ -51,8 +51,10 @@ class CashRegisterTest extends TestCase
     public function a_cash_register_can_get_total_deposited()
     {
         $denominations = [
-            'D100000' => 1, 'D50000' => 1, 'D20000' => 1, 'D10000' => 1, 'D5000' => 1, 'D1000' => 1, 'D500' => 1, 'D200' => 1, 'D100' => 1, 'D50' => 1,
+            'D100000' => 1, 'D50000' => 1, 'D20000' => 1, 'D10000' => 1, 'D5000' => 1, 'D1000' => 1, 'D500' => 1, 'D200' => 1, 'D100' => 1, 'D50' => 1
         ];
+
+        CashRegister::updateAllDenominations($denominations);
 
         $totalDeposited = CashRegister::getTotalDeposited($denominations);
 
